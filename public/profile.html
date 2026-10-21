@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile | HerbIT</title>
+  <meta name="description" content="Manage your personal HerbIT profile, view garden statistics, and update account credentials." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Main Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .profile-hero {
+      background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 60%, #40916c 100%);
+      color: #ffffff;
+      padding: 3rem 0 4.5rem;
+      position: relative;
+    }
+
+    .profile-header-card {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-avatar-bubble {
+      width: 86px;
+      height: 86px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.25rem;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      border: 3px solid rgba(255, 255, 255, 0.4);
+      box-shadow: var(--shadow-md);
+    }
+
+    .profile-info h1 {
+      font-size: 2rem;
+      font-family: var(--font-heading);
+      margin-bottom: 0.35rem;
+    }
+
+    .profile-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      color: #d8f3dc;
+    }
+
+    .profile-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Stats Grid Overlap */
+    .profile-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+      margin-top: -2.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: var(--transition-normal);
+    }
+
+    .stat-box:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .stat-box-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .stat-box-val {
+      font-size: 1.75rem;
+      font-weight: 700;
+      font-family: var(--font-heading);
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .stat-box-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    /* Settings Sections */
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media (max-width: 860px) {
+      .profile-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .settings-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 2rem;
+    }
+
+    .settings-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .settings-card-header h2 {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .settings-card-header i {
+      font-size: 1.25rem;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar-header" id="top">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-logo">
+        <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
+        <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
+      </a>
+
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav-menu" id="nav-menu">
+        <ul class="nav-list" id="nav-list">
+          <li class="nav-item"><a href="index.html#explore" class="nav-link"><i class="fa-solid fa-compass"></i> Explore Plants</a></li>
+          <li class="nav-item"><a href="garden.html" class="nav-link"><i class="fa-solid fa-seedling"></i> My Garden</a></li>
+          <li class="nav-item"><a href="submit-plant.html" class="nav-link"><i class="fa-solid fa-circle-plus"></i> Submit Plant</a></li>
+          <li class="nav-item"><a href="profile.html" class="nav-link active"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
+          <li class="nav-item"><button class="nav-btn-logout" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Profile Banner -->
+  <section class="profile-hero">
+    <div class="container">
+      <div class="profile-header-card">
+        <div class="profile-avatar-bubble" id="avatar-initials">B</div>
+        <div class="profile-info">
+          <h1 id="user-display-name">Loading Profile...</h1>
+          <div class="profile-meta">
+            <span><i class="fa-solid fa-envelope"></i> <span id="user-display-email">-</span></span>
+            <span><i class="fa-solid fa-shield-halved"></i> Role: <strong id="user-display-role" style="text-transform: capitalize;">User</strong></span>
+            <span><i class="fa-regular fa-calendar-check"></i> Joined: <span id="user-display-date">-</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="container">
+    
+    <!-- Garden Metrics Overview -->
+    <div class="profile-stats-grid">
+      <div class="stat-box">
+        <div class="stat-box-icon" style="background:#e8f5e9; color:#2e7d32;">
+          <i class="fa-solid fa-seedling"></i>
+        </div>
+        <div>
+          <div class="stat-box-val" id="stat-total-saved">0</div>
+          <div class="stat-box-label">Saved to Garden</div>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-box-icon" style="background:#e0f2fe; color:#0284c7;">
+          <i class="fa-solid fa-sun"></i>
+        </div>
+        <div>
+          <div class="stat-box-val" id="stat-growing">0</div>
+          <div class="stat-box-label">Currently Growing</div>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-box-icon" style="background:#fef3c7; color:#d97706;">
+          <i class="fa-solid fa-tree"></i>
+        </div>
+        <div>
+          <div class="stat-box-val" id="stat-mature">0</div>
+          <div class="stat-box-label">Mature Herbs</div>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-box-icon" style="background:#ffe4e6; color:#e11d48;">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <div>
+          <div class="stat-box-val" id="stat-favorites">0</div>
+          <div class="stat-box-label">Favorite Plants</div>
+        </div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-box-icon" style="background:#f3e8ff; color:#9333ea;">
+          <i class="fa-solid fa-leaf"></i>
+        </div>
+        <div>
+          <div class="stat-box-val" id="stat-submissions">0</div>
+          <div class="stat-box-label">Submissions</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Edit & Security Forms -->
+    <div class="profile-layout">
+      
+      <!-- Edit Profile Name Card -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <i class="fa-solid fa-id-badge"></i>
+          <h2>Personal Details</h2>
+        </div>
+
+        <div id="profile-name-alert" class="auth-alert" style="display:none;"></div>
+
+        <form id="edit-name-form">
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="input-name" style="font-weight:600; display:block; margin-bottom:0.4rem;">Full Name</label>
+            <input type="text" id="input-name" class="form-control" required minlength="2" maxlength="50" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border); border-radius:var(--radius-sm);" />
+            <small style="color:var(--text-light); font-size:0.8rem;">Your name as displayed across your garden and submissions.</small>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="input-email-readonly" style="font-weight:600; display:block; margin-bottom:0.4rem;">Registered Email (Permanent)</label>
+            <input type="email" id="input-email-readonly" class="form-control" disabled style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border); border-radius:var(--radius-sm); background:#f1f5f3; cursor:not-allowed;" />
+            <small style="color:var(--text-light); font-size:0.8rem;">Email addresses are securely locked to your account identity.</small>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="save-name-btn" style="border-radius:var(--radius-full); padding:0.65rem 1.4rem;">
+            <i class="fa-solid fa-check"></i> Save Profile Changes
+          </button>
+        </form>
+      </div>
+
+      <!-- Change Password Card -->
+      <div class="settings-card">
+        <div class="settings-card-header">
+          <i class="fa-solid fa-key"></i>
+          <h2>Security & Password</h2>
+        </div>
+
+        <div id="password-alert" class="auth-alert" style="display:none;"></div>
+
+        <form id="change-password-form">
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="current-password" style="font-weight:600; display:block; margin-bottom:0.4rem;">Current Password</label>
+            <input type="password" id="current-password" class="form-control" required autocomplete="current-password" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border); border-radius:var(--radius-sm);" />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="new-password" style="font-weight:600; display:block; margin-bottom:0.4rem;">New Password</label>
+            <input type="password" id="new-password" class="form-control" required minlength="6" autocomplete="new-password" placeholder="At least 6 characters" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border); border-radius:var(--radius-sm);" />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="confirm-password" style="font-weight:600; display:block; margin-bottom:0.4rem;">Confirm New Password</label>
+            <input type="password" id="confirm-password" class="form-control" required minlength="6" autocomplete="new-password" placeholder="Re-type new password" style="width:100%; padding:0.75rem 1rem; border:1px solid var(--border); border-radius:var(--radius-sm);" />
+          </div>
+
+          <button type="submit" class="btn btn-outline" id="save-password-btn" style="border-radius:var(--radius-full); padding:0.65rem 1.4rem;">
+            <i class="fa-solid fa-shield-halved"></i> Update Password
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // State
+    let currentUser = null;
+
+    // Elements
+    const avatarInitials = document.getElementById('avatar-initials');
+    const userDisplayName = document.getElementById('user-display-name');
+    const userDisplayEmail = document.getElementById('user-display-email');
+    const userDisplayRole = document.getElementById('user-display-role');
+    const userDisplayDate = document.getElementById('user-display-date');
+    const inputName = document.getElementById('input-name');
+    const inputEmailReadonly = document.getElementById('input-email-readonly');
+    const editNameForm = document.getElementById('edit-name-form');
+    const changePasswordForm = document.getElementById('change-password-form');
+    const profileNameAlert = document.getElementById('profile-name-alert');
+    const passwordAlert = document.getElementById('password-alert');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Mobile nav toggle
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    if (mobileToggle && navMenu) {
+      mobileToggle.addEventListener('click', () => navMenu.classList.toggle('open'));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfile();
+    });
+
+    async function loadUserProfile() {
+      try {
+        const res = await fetch('/api/users/me');
+        if (res.status === 401) {
+          window.location.href = '/login.html?redirect=%2Fprofile.html';
+          return;
+        }
+
+        const data = await res.json();
+        if (data.success && data.user) {
+          currentUser = data.user;
+          renderProfileData(data.user, data.stats);
+        }
+      } catch (err) {
+        console.error('Error loading profile:', err);
+      }
+    }
+
+    function renderProfileData(user, stats) {
+      userDisplayName.textContent = user.name;
+      userDisplayEmail.textContent = user.email;
+      userDisplayRole.textContent = user.role;
+      inputName.value = user.name;
+      inputEmailReadonly.value = user.email;
+
+      // Initials for bubble
+      const parts = user.name.trim().split(' ');
+      const initials = parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+      avatarInitials.textContent = initials;
+
+      // Registration Date
+      if (user.createdAt) {
+        const date = new Date(user.createdAt);
+        userDisplayDate.textContent = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      // Stats
+      if (stats) {
+        document.getElementById('stat-total-saved').textContent = stats.totalSaved || 0;
+        document.getElementById('stat-growing').textContent = stats.growing || 0;
+        document.getElementById('stat-mature').textContent = stats.mature || 0;
+        document.getElementById('stat-favorites').textContent = stats.favorites || 0;
+        document.getElementById('stat-submissions').textContent = stats.submissionsCount || 0;
+      }
+    }
+
+    // Name Update Handler
+    editNameForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      profileNameAlert.style.display = 'none';
+
+      const newName = inputName.value.trim();
+      if (newName.length < 2) {
+        showAlert(profileNameAlert, 'Name must be at least 2 characters', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/users/me', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: newName })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showAlert(profileNameAlert, 'Profile name updated successfully!', 'success');
+          userDisplayName.textContent = data.user.name;
+          const parts = data.user.name.trim().split(' ');
+          avatarInitials.textContent = parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0][0].toUpperCase();
+        } else {
+          showAlert(profileNameAlert, data.message || 'Could not update profile name', 'error');
+        }
+      } catch (err) {
+        showAlert(profileNameAlert, 'Network error updating profile', 'error');
+      }
+    });
+
+    // Password Update Handler
+    changePasswordForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      passwordAlert.style.display = 'none';
+
+      const currentPassword = document.getElementById('current-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      if (newPassword.length < 6) {
+        showAlert(passwordAlert, 'New password must be at least 6 characters', 'error');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showAlert(passwordAlert, 'New passwords do not match', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/users/me/password', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ currentPassword, newPassword, confirmPassword })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showAlert(passwordAlert, 'Password updated successfully!', 'success');
+          changePasswordForm.reset();
+        } else {
+          showAlert(passwordAlert, data.message || 'Could not change password', 'error');
+        }
+      } catch (err) {
+        showAlert(passwordAlert, 'Network error updating password', 'error');
+      }
+    });
+
+    // Logout
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', async () => {
+        try {
+          await fetch('/api/auth/logout', { method: 'POST' });
+          window.location.href = '/login.html';
+        } catch (err) {
+          window.location.href = '/login.html';
+        }
+      });
+    }
+
+    function showAlert(element, text, type) {
+      element.className = `auth-alert ${type}`;
+      element.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span>${text}</span>`;
+      element.style.display = 'flex';
+      setTimeout(() => {
+        if (type === 'success') element.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

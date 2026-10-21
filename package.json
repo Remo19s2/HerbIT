@@ -1,0 +1,35 @@
+{
+  "name": "virtual-herbal-garden",
+  "version": "1.0.0",
+  "description": "HerbIT - Full Stack Botanical Web Platform Mini Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "seed": "node seed.js",
+    "import": "node scripts/importHerbs.js"
+  },
+  "keywords": [
+    "virtual-herbal-garden",
+    "medicinal-plants",
+    "express",
+    "mongodb",
+    "mongoose",
+    "fsd-mini-project"
+  ],
+  "author": "FSD Student",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "connect-mongo": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

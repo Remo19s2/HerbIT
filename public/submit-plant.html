@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community Submissions | HerbIT</title>
+  <meta name="description" content="Contribute knowledge of indigenous herbs, traditional remedies, and botanical insights to the HerbIT repository." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Main Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .submit-hero {
+      background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 60%, #40916c 100%);
+      color: #ffffff;
+      padding: 3rem 0 3.5rem;
+      position: relative;
+    }
+
+    .tab-nav-bar {
+      display: flex;
+      gap: 1rem;
+      margin-top: -1.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    .tab-btn {
+      padding: 0.85rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-heading);
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-normal);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .form-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 2.25rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-field {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-field label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-field input, .form-field select, .form-field textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background: var(--surface);
+      outline: none;
+      transition: var(--transition-fast);
+    }
+
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .notice-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      color: #166534;
+      font-size: 0.875rem;
+      line-height: 1.45;
+      margin-bottom: 1.75rem;
+    }
+
+    /* Submissions History Table/Cards */
+    .submission-item {
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .submission-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .submission-title {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .sub-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.85rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sub-pending { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .sub-approved { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .sub-rejected { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+
+    .feedback-box {
+      background: #f8fafc;
+      border-left: 3px solid #64748b;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: #334155;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar-header" id="top">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-logo">
+        <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
+        <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
+      </a>
+
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <nav class="nav-menu" id="nav-menu">
+        <ul class="nav-list" id="nav-list">
+          <li class="nav-item"><a href="index.html#explore" class="nav-link"><i class="fa-solid fa-compass"></i> Explore Plants</a></li>
+          <li class="nav-item"><a href="garden.html" class="nav-link"><i class="fa-solid fa-seedling"></i> My Garden</a></li>
+          <li class="nav-item"><a href="submit-plant.html" class="nav-link active"><i class="fa-solid fa-circle-plus"></i> Submit Plant</a></li>
+          <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
+          <li class="nav-item"><button class="nav-btn-logout" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="submit-hero">
+    <div class="container">
+      <span style="display:inline-flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.2); padding:0.3rem 0.8rem; border-radius:99px; font-size:0.8rem; font-weight:600; margin-bottom:0.75rem;">
+        <i class="fa-solid fa-users"></i> Community Botanical Repository
+      </span>
+      <h1 style="font-family:var(--font-heading); font-size:2.25rem; margin-bottom:0.5rem;">Contribute a Medicinal Plant</h1>
+      <p style="color:#d8f3dc; max-width:650px; font-size:1.05rem; line-height:1.5;">
+        Help document rare Indian medicinal species, regional folk remedies, and traditional herbal wisdom. All submissions are carefully vetted by botanical administrators.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="container">
+    
+    <!-- Tab Controls -->
+    <div class="tab-nav-bar">
+      <button class="tab-btn active" id="tab-submit-btn">
+        <i class="fa-solid fa-pen-nib"></i> Submit New Plant
+      </button>
+      <button class="tab-btn" id="tab-history-btn">
+        <i class="fa-solid fa-clock-rotate-left"></i> My Submissions (<span id="my-submissions-count">0</span>)
+      </button>
+    </div>
+
+    <!-- VIEW 1: Submit Form -->
+    <section id="view-submit" class="form-card">
+      <div class="notice-card">
+        <i class="fa-solid fa-circle-info" style="font-size:1.25rem; margin-top:2px;"></i>
+        <div>
+          <strong>Botanical Verification Policy:</strong> Your submission will enter a pending moderation queue. Once approved, the record is integrated into the canonical herbal database. Please cite credible Ayurvedic texts, pharmacopeias, or agricultural references where possible.
+        </div>
+      </div>
+
+      <div id="submit-alert" class="auth-alert" style="display:none;"></div>
+
+      <form id="plant-submission-form">
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="sub-name">Common / Vernacular Name *</label>
+            <input type="text" id="sub-name" required placeholder="e.g. Parijat, Kalmegh, Hadjod" />
+          </div>
+
+          <div class="form-field">
+            <label for="sub-scientific">Botanical / Scientific Name *</label>
+            <input type="text" id="sub-scientific" required placeholder="e.g. Nyctanthes arbor-tristis" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="sub-english">English Name (Optional)</label>
+            <input type="text" id="sub-english" placeholder="e.g. Night-flowering Jasmine" />
+          </div>
+
+          <div class="form-field">
+            <label for="sub-family">Botanical Family (Optional)</label>
+            <input type="text" id="sub-family" placeholder="e.g. Oleaceae" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="sub-category">Category *</label>
+            <select id="sub-category" required>
+              <option value="Ayurvedic">Ayurvedic</option>
+              <option value="Medicinal">Medicinal</option>
+              <option value="Aromatic">Aromatic</option>
+              <option value="Common Herbs">Common Herbs</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="sub-parts">Parts Used (Optional)</label>
+            <input type="text" id="sub-parts" placeholder="e.g. Leaves, Bark, Flowers, Seeds" />
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="sub-description">Botanical Description & Identification *</label>
+          <textarea id="sub-description" rows="3" required placeholder="Describe the plant's morphology, appearance, habitat, and traditional characteristics..."></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="sub-benefits">Traditional Wellness & Medicinal Uses (Optional)</label>
+          <textarea id="sub-benefits" rows="3" placeholder="Traditional therapeutic indications (e.g. Fever, joint pain, respiratory relief)..."></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="sub-cultivation">Cultivation & Soil Guide (Optional)</label>
+          <textarea id="sub-cultivation" rows="2" placeholder="Sunlight, soil drainage, watering requirements, planting season..."></textarea>
+        </div>
+
+        <div class="form-grid-2">
+          <div class="form-field">
+            <label for="sub-image">Botanical Image URL (Optional)</label>
+            <input type="url" id="sub-image" placeholder="https://example.com/plant.jpg (leaves blank for botanical badge)" />
+          </div>
+
+          <div class="form-field">
+            <label for="sub-source">Reference or Scholarly Source URL (Optional)</label>
+            <input type="url" id="sub-source" placeholder="https://en.wikipedia.org/wiki/Nyctanthes_arbor-tristis" />
+          </div>
+        </div>
+
+        <div style="text-align:right; margin-top:1.5rem;">
+          <button type="submit" class="btn btn-primary" id="btn-submit-plant" style="border-radius:99px; padding:0.8rem 2rem;">
+            <i class="fa-solid fa-paper-plane"></i> Submit for Review
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- VIEW 2: Submissions History -->
+    <section id="view-history" style="display:none; margin-bottom:3.5rem;">
+      <div id="history-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <script src="submit-plant.js"></script>
+</body>
+</html>

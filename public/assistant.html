@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Santhamithra AI | HerbIT</title>
+  <meta name="description" content="Ask Santhamithra AI, your botanical companion for smarter gardening on HerbIT. Get personalized plant care, watering, propagation, and soil guidance." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* Santhamithra AI Modern Chat Layout */
+    .assistant-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-color);
+    }
+
+    .assistant-layout {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 960px;
+      margin: 1.25rem auto 2.5rem;
+      width: 100%;
+      padding: 0 1rem;
+    }
+
+    .assistant-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+      min-height: 560px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Botanical Header with high contrast */
+    .assistant-header {
+      padding: 1.25rem 1.75rem;
+      background: linear-gradient(135deg, #143626 0%, #1b4332 50%, #2d6a4f 100%);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 2px 10px rgba(20, 54, 38, 0.25);
+    }
+
+    .assistant-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .assistant-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      color: #6ee7b7;
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+
+    .assistant-title h2 {
+      font-family: var(--font-heading);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .assistant-title span {
+      font-size: 0.825rem;
+      color: #d8f3dc;
+      display: block;
+      margin-top: 0.15rem;
+      font-weight: 400;
+    }
+
+    .assistant-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-reset-chat {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-full);
+      font-size: 0.825rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: var(--transition-fast);
+    }
+
+    .btn-reset-chat:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: #ffffff;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    /* Warning Banner: Clear & Non-overlapping */
+    .assistant-disclaimer {
+      background: #fefce8;
+      border-bottom: 1px solid #fef08a;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.8rem;
+      color: #854d0e;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.4;
+      flex-shrink: 0;
+    }
+
+    .assistant-disclaimer i {
+      font-size: 1rem;
+      color: #ca8a04;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    /* Chat Messages Viewport */
+    .chat-viewport {
+      flex: 1;
+      padding: 1.5rem 1.75rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      background: #fafdfa;
+      scroll-behavior: smooth;
+    }
+
+    /* Custom Scrollbar for Chat Viewport */
+    .chat-viewport::-webkit-scrollbar {
+      width: 7px;
+    }
+    .chat-viewport::-webkit-scrollbar-track {
+      background: #f1f5f2;
+    }
+    .chat-viewport::-webkit-scrollbar-thumb {
+      background: #c2d9cb;
+      border-radius: 4px;
+    }
+    .chat-viewport::-webkit-scrollbar-thumb:hover {
+      background: #9abfa7;
+    }
+
+    /* Chat Message Bubbles */
+    .chat-message-row {
+      display: flex;
+      width: 100%;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .chat-message-row.user {
+      justify-content: flex-end;
+    }
+
+    .chat-message-row.model {
+      justify-content: flex-start;
+    }
+
+    .chat-bubble {
+      max-width: 82%;
+      padding: 1.05rem 1.35rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-bubble.user {
+      background: linear-gradient(135deg, #1b4332, #2d6a4f);
+      color: #ffffff;
+      border-radius: 20px 20px 4px 20px;
+      box-shadow: 0 4px 14px rgba(27, 67, 50, 0.18);
+    }
+
+    .chat-bubble.model {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+      border-radius: 20px 20px 20px 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chat-bubble.model .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.55rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .chat-bubble.model .ai-header i {
+      color: var(--accent);
+    }
+
+    /* Markdown styling inside AI bubble */
+    .chat-bubble.model p {
+      margin-bottom: 0.65rem;
+    }
+    .chat-bubble.model p:last-child {
+      margin-bottom: 0;
+    }
+
+    .chat-bubble.model h3,
+    .chat-bubble.model h4 {
+      font-family: var(--font-heading);
+      color: var(--primary);
+      margin-top: 0.85rem;
+      margin-bottom: 0.4rem;
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+
+    .chat-bubble.model ul,
+    .chat-bubble.model ol {
+      margin-left: 1.25rem;
+      margin-top: 0.4rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .chat-bubble.model li {
+      margin-bottom: 0.35rem;
+    }
+
+    .chat-bubble.model hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0.85rem 0;
+    }
+
+    .chat-bubble.model strong {
+      color: #143626;
+    }
+
+    .chat-bubble.model code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+
+    /* Starter Suggestions Pills */
+    .suggestions-container {
+      padding: 0.75rem 1.5rem;
+      background: #f8faf8;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .suggestions-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-right: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .suggestion-chip {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 0.4rem 0.9rem;
+      border-radius: var(--radius-full);
+      font-size: 0.825rem;
+      font-weight: 500;
+      color: var(--primary-light);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .suggestion-chip i {
+      color: var(--accent);
+      font-size: 0.85rem;
+    }
+
+    .suggestion-chip:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    /* Input Footer */
+    .assistant-input-footer {
+      padding: 1rem 1.5rem 1.15rem;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      flex-shrink: 0;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .assistant-input-wrapper {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .assistant-textarea {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition-fast);
+      background: #fafdfa;
+      color: var(--text-main);
+    }
+
+    .assistant-textarea:focus {
+      border-color: var(--accent);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .btn-send {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      transition: var(--transition-fast);
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(27, 67, 50, 0.2);
+    }
+
+    .btn-send:hover:not(:disabled) {
+      background: var(--primary-light);
+      transform: scale(1.05);
+    }
+
+    .btn-send:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .context-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      padding: 0 0.35rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .context-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .context-toggle input[type="checkbox"] {
+      accent-color: var(--primary);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .char-counter {
+      color: var(--text-light);
+      font-size: 0.775rem;
+    }
+
+    @media (max-width: 768px) {
+      .assistant-layout {
+        margin: 0.5rem auto 1.5rem;
+        padding: 0 0.5rem;
+      }
+      .assistant-card {
+        height: 85vh;
+        border-radius: var(--radius-md);
+      }
+      .assistant-header {
+        padding: 1rem 1.25rem;
+      }
+      .chat-viewport {
+        padding: 1rem;
+      }
+      .chat-bubble {
+        max-width: 90%;
+      }
+      .suggestions-container {
+        padding: 0.6rem 1rem;
+      }
+      .assistant-input-footer {
+        padding: 0.85rem 1rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body class="assistant-page">
+
+  <!-- Header & Navigation -->
+  <header class="navbar-header" id="top">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-logo" id="brand-logo">
+        <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
+        <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
+      </a>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Nav Links -->
+      <nav class="nav-menu" id="nav-menu">
+        <ul class="nav-list" id="nav-list">
+          <li class="nav-item"><a href="index.html#explore" class="nav-link"><i class="fa-solid fa-compass"></i> Explore Plants</a></li>
+          <li class="nav-item"><a href="garden.html" class="nav-link"><i class="fa-solid fa-seedling"></i> My Garden</a></li>
+          <li class="nav-item"><a href="submit-plant.html" class="nav-link"><i class="fa-solid fa-circle-plus"></i> Submit Plant</a></li>
+          <li class="nav-item"><a href="profile.html" class="nav-link"><i class="fa-solid fa-circle-user"></i> Profile</a></li>
+          <li class="nav-item"><button class="nav-btn-logout" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Assistant Layout -->
+  <main class="assistant-layout">
+    <div class="assistant-card">
+      
+      <!-- Card Header -->
+      <div class="assistant-header">
+        <div class="assistant-brand">
+          <div class="assistant-avatar">
+            <i class="fa-solid fa-spa"></i>
+          </div>
+          <div class="assistant-title">
+            <h2>Santhamithra AI</h2>
+            <span>Your Botanical Companion for Smarter Gardening</span>
+          </div>
+        </div>
+
+        <div class="assistant-header-actions">
+          <button type="button" id="clear-chat-btn" class="btn-reset-chat" title="Start fresh conversation">
+            <i class="fa-solid fa-rotate-left"></i> Reset Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Warning Banner -->
+      <div class="assistant-disclaimer">
+        <i class="fa-solid fa-shield-heart"></i>
+        <span><strong>Educational Guidance:</strong> Santhamithra AI assists with horticulture and plant care. For medical treatment, dosages, or poisoning, always consult a licensed Ayurvedic physician (Vaidya) or doctor.</span>
+      </div>
+
+      <!-- Chat History Viewport -->
+      <div class="chat-viewport" id="chat-viewport">
+        <!-- Initial Welcome Message from Santhamithra AI -->
+        <div class="chat-message-row model">
+          <div class="chat-bubble model">
+            <div class="ai-header">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Santhamithra AI</span>
+            </div>
+            <p><strong>Hello! I'm Santhamithra AI</strong>, your botanical companion for smarter gardening.</p>
+            <p>I can help you grow Indian medicinal plants, improve your soil, understand watering and sunlight requirements, learn propagation techniques, and troubleshoot common gardening problems.</p>
+            <p style="margin-top:0.4rem; font-size:0.9rem; color:var(--text-muted);">What would you like to grow today?</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Suggested Questions -->
+      <div class="suggestions-container" id="suggestions-bar">
+        <span class="suggestions-label"><i class="fa-regular fa-lightbulb"></i> Prompts:</span>
+        <button class="suggestion-chip" data-prompt="How do I grow and care for Tulsi?">
+          <i class="fa-solid fa-seedling"></i> Growing Tulsi
+        </button>
+        <button class="suggestion-chip" data-prompt="What is the ideal soil mix for Ashwagandha in containers?">
+          <i class="fa-solid fa-sun"></i> Soil for Ashwagandha
+        </button>
+        <button class="suggestion-chip" data-prompt="How to propagate Neem from stem cuttings?">
+          <i class="fa-solid fa-scissors"></i> Propagating Neem
+        </button>
+        <button class="suggestion-chip" data-prompt="What are safe organic remedies for common pests on herbal plants?">
+          <i class="fa-solid fa-bug"></i> Organic Pest Control
+        </button>
+      </div>
+
+      <!-- Input Footer -->
+      <div class="assistant-input-footer">
+        <div class="input-row">
+          <div class="assistant-input-wrapper">
+            <input
+              type="text"
+              id="chat-input"
+              class="assistant-textarea"
+              placeholder="Ask Santhamithra about soil, watering, propagation, or medicinal herbs..."
+              autocomplete="off"
+              maxlength="1000"
+            />
+          </div>
+          <button type="button" id="btn-send" class="btn-send" aria-label="Send question to Santhamithra AI">
+            <i class="fa-solid fa-paper-plane" id="send-icon"></i>
+            <i class="fa-solid fa-circle-notch fa-spin" id="send-spinner" style="display:none;"></i>
+          </button>
+        </div>
+
+        <div class="context-row">
+          <label class="context-toggle">
+            <input type="checkbox" id="include-garden-context" checked />
+            <span>Include plants from <strong>My Garden</strong> in your question context</span>
+          </label>
+          <span class="char-counter" id="char-counter">0 / 1000</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="assistant.js"></script>
+</body>
+</html>
