@@ -252,11 +252,11 @@
   <!-- Simple Botanical Brand Header -->
   <header class="navbar-header" style="box-shadow: none; border-bottom: 1px solid var(--border);">
     <div class="container navbar-container">
-      <a href="index.html" class="brand-logo">
+      <a href="home.html" class="brand-logo">
         <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
         <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
       </a>
-      <a href="index.html" class="btn btn-outline btn-sm">
+      <a href="home.html" class="btn btn-outline btn-sm">
         <i class="fa-solid fa-house"></i> Return Home
       </a>
     </div>
@@ -327,8 +327,8 @@
       <div class="auth-footer">
         <p>Don't have an account yet? <a href="register.html">Register here</a></p>
         <div>
-          <a href="index.html" class="auth-back-link">
-            <i class="fa-solid fa-arrow-left"></i> Back to Medicinal Explorer
+          <a href="home.html" class="auth-back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to HerbIT Home
           </a>
         </div>
       </div>
@@ -408,7 +408,7 @@
             } else if (data.user && data.user.role === 'admin') {
               window.location.href = '/admin.html';
             } else {
-              window.location.href = '/index.html';
+              window.location.href = '/home.html';
             }
           }, 800);
         } else {

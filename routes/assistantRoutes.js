@@ -66,38 +66,45 @@ router.post('/chat', assistantLimiter, async (req, res) => {
       });
     }
 
+    const tRequestReceived = Date.now();
+    console.log(`[Assistant API] Request received. History turns: ${Array.isArray(history) ? history.length : 0}, Garden context requested: ${Boolean(includeGardenContext)}`);
+
     // Retrieve personal garden context if requested and user is authenticated
     let gardenContextText = '';
+    const tGardenStart = Date.now();
     if (includeGardenContext && req.session && req.session.userId) {
       try {
         const userGarden = await GardenEntry.find({ userId: req.session.userId })
           .populate('plantId', 'name scientificName category')
-          .limit(20);
+          .limit(10)
+          .lean();
 
         if (userGarden && userGarden.length > 0) {
           const plantList = userGarden
             .filter((e) => e.plantId)
-            .map((e) => `- ${e.plantId.name} (${e.plantId.scientificName || ''}) — Status: ${e.status}${e.personalNotes ? ` (User Notes: ${e.personalNotes})` : ''}`)
+            .map((e) => `- ${e.plantId.name} (${e.plantId.scientificName || ''}) — Status: ${e.status}${e.personalNotes ? ` (Notes: ${e.personalNotes.slice(0, 100)})` : ''}`)
             .join('\n');
 
           gardenContextText = `\n\n[USER PERSONAL GARDEN CONTEXT]: The user currently has the following plants saved in their personal garden on this platform:\n${plantList}\nUse this context when relevant to provide personalized answers.`;
         }
       } catch (ctxErr) {
-        console.warn('Notice: Could not load garden context for AI prompt:', ctxErr.message);
+        console.warn('[Assistant API] Notice: Could not load garden context:', ctxErr.message);
       }
     }
+    const gardenPrepMs = Date.now() - tGardenStart;
+    console.log(`[Assistant API] Garden context prepared in ${gardenPrepMs}ms (entries found: ${gardenContextText ? 'yes' : 'none'})`);
 
     // Build Gemini request contents
     const contents = [];
 
-    // Add conversation history if provided (limit to 8 recent exchanges)
+    // Add conversation history if provided (limit to 6 recent messages / 3 full turns, max 600 chars each)
     if (Array.isArray(history) && history.length > 0) {
-      const sanitizedHistory = history.slice(-8);
+      const sanitizedHistory = history.slice(-6);
       for (const turn of sanitizedHistory) {
         if (turn && turn.text && (turn.role === 'user' || turn.role === 'model')) {
           contents.push({
             role: turn.role,
-            parts: [{ text: String(turn.text).slice(0, 1500) }]
+            parts: [{ text: String(turn.text).slice(0, 600) }]
           });
         }
       }
@@ -109,24 +116,29 @@ router.post('/chat', assistantLimiter, async (req, res) => {
       parts: [{ text: userMessage + gardenContextText }]
     });
 
-    // Models to try in order of availability and stability
+    // Supported high-speed models in order of proven low latency
+    // gemini-3.5-flash-lite is Google's recommended fast lightweight model (responds in ~2s)
     const candidateModels = [
-      'gemini-flash-latest',
+      'gemini-3.5-flash-lite',
       'gemini-3.5-flash',
-      'gemini-3.8-flash',
-      'gemini-3.1-flash-lite',
-      'gemini-2.5-flash-lite'
+      'gemini-flash-latest'
     ];
 
     let geminiResponse = null;
+    let selectedModel = '';
     let lastErrorMsg = '';
 
     for (const modelName of candidateModels) {
+      const tGeminiStart = Date.now();
       try {
+        console.log(`[Assistant API] Trying Gemini model: ${modelName}...`);
         const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+        
+        // Use AbortSignal.timeout(10000) so a hanging upstream request aborts in 10s max
         const resp = await fetch(geminiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(10000),
           body: JSON.stringify({
             systemInstruction: {
               parts: [{ text: SYSTEM_INSTRUCTION }]
@@ -134,32 +146,38 @@ router.post('/chat', assistantLimiter, async (req, res) => {
             contents: contents,
             generationConfig: {
               temperature: 0.7,
-              maxOutputTokens: 1200
+              maxOutputTokens: 1000
             }
           })
         });
 
+        const geminiCallDuration = Date.now() - tGeminiStart;
+
         if (resp.ok) {
           geminiResponse = resp;
+          selectedModel = modelName;
+          console.log(`[Assistant API] Gemini model ${modelName} responded successfully in ${geminiCallDuration}ms`);
           break;
         } else {
           const errBody = await resp.json().catch(() => ({}));
           lastErrorMsg = errBody.error ? errBody.error.message : resp.statusText;
-          // Continue loop to try fallback models on 404, 503, 429, or 500
-          console.warn(`Model ${modelName} returned ${resp.status} (${lastErrorMsg}), attempting fallback model...`);
+          console.warn(`[Assistant API] Model ${modelName} returned HTTP ${resp.status} after ${geminiCallDuration}ms (${lastErrorMsg}). Falling back...`);
         }
       } catch (callErr) {
-        lastErrorMsg = callErr.message;
+        const geminiCallDuration = Date.now() - tGeminiStart;
+        lastErrorMsg = callErr.name === 'TimeoutError' ? 'Upstream request timed out after 10000ms' : callErr.message;
+        console.warn(`[Assistant API] Model ${modelName} failed after ${geminiCallDuration}ms: ${lastErrorMsg}. Falling back...`);
       }
     }
 
     if (!geminiResponse || !geminiResponse.ok) {
-      console.error('Gemini API Error:', lastErrorMsg);
+      const totalBackendTime = Date.now() - tRequestReceived;
+      console.error(`[Assistant API] All Gemini candidate models failed after ${totalBackendTime}ms. Last error: ${lastErrorMsg}`);
       return res.status(502).json({
         success: false,
         configured: true,
         message: `Gemini AI service error: ${lastErrorMsg || 'Unexpected response from Google AI'}`,
-        reply: `⚠️ The AI service encountered a temporary error. Please verify your API key quota or try again in a moment.`
+        reply: `⚠️ The AI service encountered a temporary error. Please try again in a few moments.`
       });
     }
 
@@ -173,14 +191,19 @@ router.post('/chat', assistantLimiter, async (req, res) => {
         ? result.candidates[0].content.parts[0].text
         : 'I apologize, but I could not formulate an answer at this moment. Please try again.';
 
+    const totalBackendDuration = Date.now() - tRequestReceived;
+    console.log(`[Assistant API] Total backend response time: ${totalBackendDuration}ms (Model: ${selectedModel})`);
+
     return res.status(200).json({
       success: true,
       configured: true,
+      modelUsed: selectedModel,
+      backendDurationMs: totalBackendDuration,
       reply: generatedText,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
-    console.error('AI assistant endpoint error:', error.message);
+    console.error('[Assistant API] Server error processing question:', error.message);
     return res.status(500).json({
       success: false,
       message: 'Server error processing your question with AI assistant'

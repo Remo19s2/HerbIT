@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medicinal Plant Explorer | HerbIT</title>
+  <meta name="description" content="Search, filter, and explore traditional medicinal herbs, botanical taxonomy, Ayurvedic benefits, and home cultivation techniques on HerbIT." />
+  
+  <!-- Google Fonts for Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar-header" id="top">
+    <div class="container navbar-container">
+      <a href="home.html" class="brand-logo" id="brand-logo" title="HerbIT Home">
+        <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
+        <div class="brand-text-wrapper">
+          <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
+          <span class="landing-nav-tagline">Grow Knowledge. Nurture Nature.</span>
+        </div>
+      </a>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Nav Links -->
+      <nav class="nav-menu" id="nav-menu">
+        <ul class="nav-list" id="nav-list">
+          <li class="nav-item"><a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li class="nav-item"><a href="explore.html" class="nav-link active"><i class="fa-solid fa-compass"></i> Explore Plants</a></li>
+          <li class="nav-item"><a href="assistant.html" class="nav-link"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Assistant</a></li>
+          <!-- Dynamic Auth Links managed by script.js -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Explorer Header / Hero -->
+  <section class="hero-section" style="padding: 3.5rem 0 3rem;">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <i class="fa-solid fa-seedling"></i> Interactive Botanical Repository • HerbIT
+      </div>
+      <h1 class="hero-title" style="font-size: 2.75rem; margin-bottom: 0.85rem;">Medicinal Plant Explorer</h1>
+      <p class="hero-subtitle" style="margin-bottom: 1.75rem; max-width: 720px; margin-left: auto; margin-right: auto;">
+        Discover traditional medicinal herbs, Ayurvedic treasures, scientific classifications, therapeutic benefits, and home cultivation guides.
+      </p>
+
+      <!-- Quick Metrics Bar -->
+      <div class="hero-stats">
+        <div class="stat-card">
+          <span class="stat-num" id="total-species-count">10+</span>
+          <span class="stat-label">Herbal Species</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">Verified Botanical Data</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-card">
+          <span class="stat-num">Ayurvedic</span>
+          <span class="stat-label">& Traditional Insights</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plant Explorer Section -->
+  <section class="explorer-section" id="explore" style="padding-top: 2.5rem;">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <span class="section-tag">Botanical Catalog</span>
+          <h2 class="section-title">Explore Medicinal Plants</h2>
+          <p class="section-description">Search by plant name or filter by traditional herbal categories.</p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <a href="submit-plant.html" class="btn btn-outline btn-sm" id="btn-submit-plant-header" title="Submit a medicinal plant">
+            <i class="fa-solid fa-circle-plus"></i> Submit Plant
+          </a>
+          <div class="plant-count-badge" id="plant-count-badge">
+            <i class="fa-solid fa-leaf"></i> <span id="count-display">Loading plants...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search and Filter Bar -->
+      <div class="filter-controls-card">
+        <!-- Search Input -->
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input
+            type="text"
+            id="search-input"
+            class="search-input"
+            placeholder="Search by plant name (e.g. Tulsi, Neem, Aloe)..."
+            autocomplete="off"
+          />
+          <button class="clear-search-btn" id="clear-search-btn" title="Clear search" style="display: none;">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- Category Pills -->
+        <div class="category-pills" id="category-pills">
+          <button class="pill-btn active" data-category="All">All Plants</button>
+          <button class="pill-btn" data-category="Medicinal">Medicinal</button>
+          <button class="pill-btn" data-category="Ayurvedic">Ayurvedic</button>
+          <button class="pill-btn" data-category="Aromatic">Aromatic</button>
+          <button class="pill-btn" data-category="Common Herbs">Common Herbs</button>
+          <button class="pill-btn" data-category="Other">Other</button>
+        </div>
+      </div>
+
+      <!-- State: Loading Spinner -->
+      <div class="state-container" id="loading-state">
+        <div class="spinner"></div>
+        <p>Fetching medicinal plants from database...</p>
+      </div>
+
+      <!-- State: Error Message -->
+      <div class="state-container error-state" id="error-state" style="display: none;">
+        <i class="fa-solid fa-triangle-exclamation state-icon"></i>
+        <h3>Unable to load plants</h3>
+        <p id="error-message">Could not connect to the backend server. Please verify the Express server and MongoDB are running.</p>
+        <button class="btn btn-primary" id="retry-fetch-btn">
+          <i class="fa-solid fa-rotate-right"></i> Try Again
+        </button>
+      </div>
+
+      <!-- State: Empty State -->
+      <div class="state-container empty-state" id="empty-state" style="display: none;">
+        <i class="fa-solid fa-plant-wilt state-icon"></i>
+        <h3>No matching plants found</h3>
+        <p>No plants match your current search query or selected category filter.</p>
+        <button class="btn btn-outline" id="reset-filter-btn">
+          <i class="fa-solid fa-filter-circle-xmark"></i> Reset All Filters
+        </button>
+      </div>
+
+      <!-- Plants Grid Container -->
+      <div class="plants-grid" id="plants-grid"></div>
+    </div>
+  </section>
+
+  <!-- Plant Details Modal -->
+  <div class="modal-backdrop" id="plant-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="modal-content" id="modal-content">
+        <!-- Content dynamically injected via script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Educational Disclaimer Banner -->
+  <section class="disclaimer-section">
+    <div class="container">
+      <div class="disclaimer-card">
+        <i class="fa-solid fa-circle-info disclaimer-icon"></i>
+        <div>
+          <h4>Educational Disclaimer</h4>
+          <p>
+            The botanical and wellness information presented in HerbIT is strictly for educational, academic, and cultural demonstration purposes. It does not constitute medical advice.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="brand-logo footer-logo">
+          <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
+          <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
+        </div>
+        <p class="footer-text">
+          HerbIT: Grow Knowledge. Nurture Nature. A Full Stack Web Development Lab Mini Project built with HTML, CSS, JavaScript, Node.js, Express, and MongoDB Atlas.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>Quick Navigation</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="explore.html">Plant Explorer</a></li>
+          <li><a href="assistant.html">Santhamithra AI</a></li>
+          <li><a href="garden.html">My Personal Garden</a></li>
+          <li><a href="admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>Tech Stack</h4>
+        <ul>
+          <li><i class="fa-solid fa-code"></i> Frontend: HTML5, CSS3, Vanilla JS</li>
+          <li><i class="fa-brands fa-node-js"></i> Backend: Node.js & Express</li>
+          <li><i class="fa-solid fa-database"></i> Database: MongoDB Atlas & Mongoose</li>
+          <li><i class="fa-solid fa-plug"></i> Architecture: RESTful API</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-content">
+        <p>© 2026 HerbIT • College FSD Lab Mini Project</p>
+        <p class="footer-badge">Academic Demonstration</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Santhamithra AI Button -->
+  <a href="assistant.html" 
+     class="floating-ai-btn" 
+     id="floating-ai-btn" 
+     aria-label="Ask Santhamithra AI" 
+     title="Ask Santhamithra AI Gardening Assistant">
+    <span class="floating-ai-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+    <span class="floating-ai-text">Ask Santhamithra</span>
+  </a>
+
+  <!-- Main JavaScript File -->
+  <script src="script.js"></script>
+</body>
+</html>

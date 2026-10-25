@@ -4,6 +4,8 @@
 
 let conversationHistory = [];
 
+let isRequestPending = false;
+
 // DOM Elements
 const chatViewport = document.getElementById('chat-viewport');
 const chatInput = document.getElementById('chat-input');
@@ -48,7 +50,9 @@ function setupEventListeners() {
   chatInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      if (!isRequestPending) {
+        sendMessage();
+      }
     }
   });
 
@@ -61,11 +65,16 @@ function setupEventListeners() {
   });
 
   // Send button
-  btnSend.addEventListener('click', sendMessage);
+  btnSend.addEventListener('click', () => {
+    if (!isRequestPending) {
+      sendMessage();
+    }
+  });
 
   // Suggested questions chips
   if (suggestionsBar) {
     suggestionsBar.addEventListener('click', (e) => {
+      if (isRequestPending) return;
       const chip = e.target.closest('.suggestion-chip');
       if (!chip) return;
       const prompt = chip.dataset.prompt;
@@ -102,6 +111,8 @@ function setupEventListeners() {
 }
 
 async function sendMessage() {
+  if (isRequestPending) return;
+
   const text = chatInput.value.trim();
   if (!text) return;
 
@@ -112,16 +123,18 @@ async function sendMessage() {
     charCounter.textContent = '0 / 1000';
   }
 
-  // Set loading state
+  // Set loading state immediately (disables send button, shows spinner)
   setLoading(true);
 
-  // Placeholder thinking bubble
+  // Immediate placeholder thinking bubble
   const thinkingBubbleRow = appendThinkingBubble();
+  const tClientStart = performance.now();
 
   try {
     const res = await fetch('/api/assistant/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(25000),
       body: JSON.stringify({
         message: text,
         history: conversationHistory,
@@ -129,8 +142,11 @@ async function sendMessage() {
       })
     });
 
+    const clientElapsedMs = Math.round(performance.now() - tClientStart);
     const data = await res.json();
     thinkingBubbleRow.remove();
+
+    console.log(`[Frontend Assistant] Response received in ${clientElapsedMs}ms (Backend reported: ${data.backendDurationMs || 'N/A'}ms, Model: ${data.modelUsed || 'unknown'})`);
 
     if (res.ok && data.reply) {
       appendBubble('model', data.reply);
@@ -139,17 +155,22 @@ async function sendMessage() {
       conversationHistory.push({ role: 'user', text: text });
       conversationHistory.push({ role: 'model', text: data.reply });
 
-      // Keep recent 10 turns
-      if (conversationHistory.length > 10) {
-        conversationHistory = conversationHistory.slice(-10);
+      // Keep recent 6 items (3 turns)
+      if (conversationHistory.length > 6) {
+        conversationHistory = conversationHistory.slice(-6);
       }
     } else {
       appendBubble('model', data.reply || data.message || '⚠️ An error occurred connecting to Santhamithra AI. Please try again.');
     }
   } catch (err) {
     thinkingBubbleRow.remove();
-    console.error('AI chat network error:', err);
-    appendBubble('model', '⚠️ Unable to reach the server. Please check your network connection and try again.');
+    const clientElapsedMs = Math.round(performance.now() - tClientStart);
+    console.error(`[Frontend Assistant] AI chat network error after ${clientElapsedMs}ms:`, err);
+    if (err.name === 'TimeoutError') {
+      appendBubble('model', '⚠️ The request timed out. Santhamithra AI took longer than expected to respond. Please try asking again.');
+    } else {
+      appendBubble('model', '⚠️ Unable to reach the server. Please check your network connection and try again.');
+    }
   } finally {
     setLoading(false);
     chatInput.focus();
@@ -211,10 +232,15 @@ function scrollChatToBottom() {
 }
 
 function setLoading(isLoading) {
+  isRequestPending = isLoading;
   btnSend.disabled = isLoading;
   chatInput.disabled = isLoading;
   sendIcon.style.display = isLoading ? 'none' : 'inline-block';
   sendSpinner.style.display = isLoading ? 'inline-block' : 'none';
+  if (suggestionsBar) {
+    suggestionsBar.style.pointerEvents = isLoading ? 'none' : 'auto';
+    suggestionsBar.style.opacity = isLoading ? '0.5' : '1';
+  }
 }
 
 /**

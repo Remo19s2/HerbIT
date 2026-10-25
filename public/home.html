@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HerbIT | Grow Knowledge. Nurture Nature.</title>
+  <meta name="description" content="HerbIT is an interactive digital garden for discovering traditional medicinal herbs, Ayurvedic treasures, botanical taxonomy, and AI-guided plant cultivation." />
+  
+  <!-- Google Fonts for Modern Botanical Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Base & Core Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- Dedicated Landing Page Stylesheet -->
+  <link rel="stylesheet" href="landing.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. Navigation Bar
+       ======================================================================== -->
+  <header class="navbar-header" id="top">
+    <div class="container navbar-container">
+      <a href="home.html" class="brand-logo" id="brand-logo" title="HerbIT - Grow Knowledge. Nurture Nature.">
+        <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
+        <div class="brand-text-wrapper">
+          <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
+          <span class="landing-nav-tagline">Grow Knowledge. Nurture Nature.</span>
+        </div>
+      </a>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Nav Links -->
+      <nav class="nav-menu" id="nav-menu">
+        <ul class="nav-list" id="nav-list">
+          <li class="nav-item"><a href="home.html" class="nav-link active-landing"><i class="fa-solid fa-house"></i> Home</a></li>
+          <li class="nav-item"><a href="explore.html" class="nav-link"><i class="fa-solid fa-compass"></i> Explore Plants</a></li>
+          <li class="nav-item"><a href="assistant.html" class="nav-link"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Assistant</a></li>
+          <!-- Dynamic Auth Links managed by landing.js -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       2. Hero Section
+       ======================================================================== -->
+  <section class="landing-hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-copy-col">
+          <div class="hero-pill-badge">
+            <i class="fa-solid fa-seedling"></i>
+            <span>Virtual Herbal Sanctuary • Botanical Tech</span>
+          </div>
+
+          <h1 class="hero-main-title">
+            Discover Nature's <br />
+            <span class="gradient-text">Healing Sanctuary</span>
+          </h1>
+
+          <p class="hero-lead-text">
+            HerbIT is an interactive digital garden connecting ancient medicinal plant wisdom, verified botanical taxonomy, and traditional wellness knowledge with intelligent AI cultivation guidance.
+          </p>
+
+          <div class="hero-button-group">
+            <a href="explore.html" class="btn-hero-primary" id="btn-hero-explore">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <span>Explore Medicinal Plants</span>
+            </a>
+            <a href="assistant.html" class="btn-hero-secondary" id="btn-hero-assistant">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Meet Santhamithra AI</span>
+            </a>
+          </div>
+
+          <!-- Verified Project Metrics -->
+          <div class="hero-stats-row">
+            <div class="hero-stat-item">
+              <span class="hero-stat-value">
+                <i class="fa-solid fa-leaf"></i>
+                <span id="hero-species-count">360+</span>
+              </span>
+              <span class="hero-stat-desc">Herbal Species</span>
+            </div>
+            <div class="hero-stat-sep"></div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-value">
+                <i class="fa-solid fa-certificate"></i>
+                <span>100%</span>
+              </span>
+              <span class="hero-stat-desc">Verified Botanical Data</span>
+            </div>
+            <div class="hero-stat-sep"></div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-value">
+                <i class="fa-solid fa-robot"></i>
+                <span>24/7</span>
+              </span>
+              <span class="hero-stat-desc">AI Garden Guidance</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-visual-col">
+          <div class="hero-visual-card">
+            <!-- Hero Photography Frame with reliable local image -->
+            <div class="hero-img-frame">
+              <img 
+                src="images/plants/welcome-hero.jpg" 
+                alt="Lush medicinal herbal garden with sunlight" 
+                loading="eager"
+                onerror="this.onerror=null; this.src='images/plants/default-plant.jpg';"
+              />
+            </div>
+
+            <!-- Floating Highlights -->
+            <div class="hero-floating-badge hero-badge-top">
+              <div class="floating-icon-bubble bubble-emerald">
+                <i class="fa-solid fa-spa"></i>
+              </div>
+              <div>
+                <div class="floating-text-primary">Ayurvedic Heritage</div>
+                <div class="floating-text-sub">Tulsi, Neem, Ashwagandha</div>
+              </div>
+            </div>
+
+            <div class="hero-floating-badge hero-badge-bottom">
+              <div class="floating-icon-bubble bubble-gold">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+              </div>
+              <div>
+                <div class="floating-text-primary">Santhamithra AI</div>
+                <div class="floating-text-sub">Instant Plant Care Advice</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3. About HerbIT Section
+       ======================================================================== -->
+  <section class="landing-section section-cream" id="about">
+    <div class="container">
+      <div class="landing-header">
+        <span class="landing-tag">About HerbIT</span>
+        <h2 class="landing-title">Preserving Botanical Wisdom for the Modern Era</h2>
+        <p class="landing-subtitle">
+          HerbIT is an educational virtual herbal garden created to bridge centuries of traditional wellness heritage with modern full-stack web technology.
+        </p>
+      </div>
+
+      <div class="about-pillars-grid">
+        <div class="about-pillar-card">
+          <div class="pillar-icon-box">
+            <i class="fa-solid fa-mortar-pestle"></i>
+          </div>
+          <h3>Traditional Herbal Knowledge</h3>
+          <p>
+            Learn time-tested wellness practices and classical applications of revered Indian herbs like Tulsi, Neem, Turmeric, and Ashwagandha, documented with respectful adherence to Ayurvedic traditions.
+          </p>
+        </div>
+
+        <div class="about-pillar-card">
+          <div class="pillar-icon-box">
+            <i class="fa-solid fa-book-bookmark"></i>
+          </div>
+          <h3>Accurate Botanical Taxonomy</h3>
+          <p>
+            Explore precise scientific classifications (family, genus, species), anatomical parts used (leaves, roots, rhizomes), and categorized therapeutic properties organized in a searchable catalog.
+          </p>
+        </div>
+
+        <div class="about-pillar-card">
+          <div class="pillar-icon-box">
+            <i class="fa-solid fa-sun-plant-wilt"></i>
+          </div>
+          <h3>Practical Home Cultivation</h3>
+          <p>
+            Receive actionable instructions on sunlight requirements, soil drainage, watering regimens, and climate suitability to cultivate healing botanical specimens right in your balcony or backyard.
+          </p>
+        </div>
+      </div>
+
+      <!-- Informative Mission Banner -->
+      <div class="about-banner-quote">
+        <div class="banner-quote-icon">
+          <i class="fa-solid fa-hand-holding-heart"></i>
+        </div>
+        <div class="banner-quote-text">
+          <h4>Our Guiding Mission: "Grow Knowledge. Nurture Nature."</h4>
+          <p>
+            By digitizing herbal knowledge into an accessible, interactive digital sanctuary, HerbIT empowers students, researchers, and home gardeners to understand, celebrate, and preserve our natural biodiversity.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. Features Section
+       ======================================================================== -->
+  <section class="landing-section section-white" id="features">
+    <div class="container">
+      <div class="landing-header">
+        <span class="landing-tag gold-tag">Platform Features</span>
+        <h2 class="landing-title">Everything You Need to Explore & Cultivate</h2>
+        <p class="landing-subtitle">
+          Designed with purpose: explore comprehensive botanical data, curate your personal garden, consult an AI botanist, and contribute to the community.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1: Explorer -->
+        <a href="explore.html" class="feature-box">
+          <div class="feature-top">
+            <div class="feature-icon"><i class="fa-solid fa-compass"></i></div>
+            <span class="feature-badge-mini">Core Feature</span>
+          </div>
+          <h3>Medicinal Plant Explorer</h3>
+          <p>Browse our extensive database of medicinal plants with interactive search, scientific nomenclature, detailed benefits, and parts used.</p>
+          <div class="feature-link-arrow">
+            <span>Open Explorer</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Feature 2: Search & Categories -->
+        <a href="explore.html" class="feature-box">
+          <div class="feature-top">
+            <div class="feature-icon"><i class="fa-solid fa-filter"></i></div>
+            <span class="feature-badge-mini">Catalog Filters</span>
+          </div>
+          <h3>Search & Category Filtering</h3>
+          <p>Quickly find plants by common names or filter dynamically across Ayurvedic, Medicinal, Aromatic, and Common Herb categories.</p>
+          <div class="feature-link-arrow">
+            <span>Filter Plants</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Feature 3: Santhamithra AI Assistant -->
+        <a href="assistant.html" class="feature-box">
+          <div class="feature-top">
+            <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+            <span class="feature-badge-mini">AI Powered</span>
+          </div>
+          <h3>Santhamithra AI Assistant</h3>
+          <p>Consult our dedicated gardening companion for intelligent answers regarding soil pH, sunlight, watering schedules, and herbal remedies.</p>
+          <div class="feature-link-arrow">
+            <span>Chat with AI</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Feature 4: Personal Garden -->
+        <a href="garden.html" class="feature-box">
+          <div class="feature-top">
+            <div class="feature-icon"><i class="fa-solid fa-seedling"></i></div>
+            <span class="feature-badge-mini">User Garden</span>
+          </div>
+          <h3>Personal Herbal Garden</h3>
+          <p>Save favorite herbs to your personal collection. Track cultivation status across 'Want to Grow', 'Growing', 'Mature', and write custom care notes.</p>
+          <div class="feature-link-arrow">
+            <span>View Garden</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Feature 5: Community Submissions -->
+        <a href="submit-plant.html" class="feature-box">
+          <div class="feature-top">
+            <div class="feature-icon"><i class="fa-solid fa-circle-plus"></i></div>
+            <span class="feature-badge-mini">Crowdsourced</span>
+          </div>
+          <h3>Community Plant Submissions</h3>
+          <p>Share local or family herbal knowledge by submitting new plant records complete with therapeutic uses and cultivation techniques.</p>
+          <div class="feature-link-arrow">
+            <span>Submit a Plant</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+
+        <!-- Feature 6: User Profiles & Security -->
+        <a href="login.html" class="feature-box">
+          <div class="feature-top">
+            <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <span class="feature-badge-mini">Account & Admin</span>
+          </div>
+          <h3>Profiles & Protected Access</h3>
+          <p>Secure session-based accounts, personal profile management, and dedicated administrative controls for database synchronization.</p>
+          <div class="feature-link-arrow">
+            <span>Sign In / Profile</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       5. Featured Plants Showcase
+       ======================================================================== -->
+  <section class="landing-section section-cream" id="featured-plants">
+    <div class="container">
+      <div class="landing-header">
+        <span class="landing-tag">Botanical Showcase</span>
+        <h2 class="landing-title">Featured Medicinal Treasures</h2>
+        <p class="landing-subtitle">
+          A small glimpse into our verified botanical repository. Dive in to discover their healing virtues and cultivation instructions.
+        </p>
+      </div>
+
+      <!-- Plants loaded dynamically via landing.js with distinct local photography -->
+      <div class="featured-plants-grid" id="featured-plants-container">
+        <!-- Rendered by landing.js -->
+      </div>
+
+      <div class="featured-plants-cta-box">
+        <a href="explore.html" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem;">
+          <i class="fa-solid fa-compass"></i>
+          <span>Browse All Medicinal Plants in Explorer</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. Santhamithra AI Assistant Section
+       ======================================================================== -->
+  <section class="ai-showcase-section" id="ai-assistant">
+    <div class="container">
+      <div class="ai-grid">
+        <div class="ai-content">
+          <span class="landing-tag">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> AI Botanical Guidance
+          </span>
+          <h2 class="landing-title">Meet Santhamithra, Your Garden Companion</h2>
+          <p class="landing-subtitle">
+            Have questions about why your Tulsi leaves are yellowing or what soil composition works best for Aloe Vera? Santhamithra is ready with thoughtful, botanical assistance.
+          </p>
+
+          <div class="ai-points-list">
+            <div class="ai-point-item">
+              <div class="ai-point-icon"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+              <div class="ai-point-text">
+                <h4>Cultivation & Climate Advice</h4>
+                <p>Personalized guidance on watering routines, sunlight exposure, and ideal temperature conditions for medicinal plants.</p>
+              </div>
+            </div>
+
+            <div class="ai-point-item">
+              <div class="ai-point-icon"><i class="fa-solid fa-bug-slash"></i></div>
+              <div class="ai-point-text">
+                <h4>Natural Pest Deterrence</h4>
+                <p>Organic, chemical-free solutions using neem oil and natural methods to safeguard your herbs safely.</p>
+              </div>
+            </div>
+
+            <div class="ai-point-item">
+              <div class="ai-point-icon"><i class="fa-solid fa-mug-hot"></i></div>
+              <div class="ai-point-text">
+                <h4>Traditional Brews & Usage</h4>
+                <p>Learn historical herbal infusions, decoction tips, and traditional methods of utilizing plant parts.</p>
+              </div>
+            </div>
+          </div>
+
+          <a href="assistant.html" class="btn-hero-primary" style="display: inline-flex;">
+            <i class="fa-solid fa-comments"></i>
+            <span>Talk to Santhamithra AI</span>
+          </a>
+        </div>
+
+        <div class="ai-visual">
+          <div class="ai-chat-mockup">
+            <div class="chat-mock-header">
+              <div class="chat-mock-avatar">
+                <div class="avatar-badge">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <div>
+                  <div style="font-weight: 700; font-size: 0.95rem; color: #ffffff;">Santhamithra AI</div>
+                  <div style="font-size: 0.76rem; color: #b7e4c7;">Botanical Assistant</div>
+                </div>
+              </div>
+              <span class="chat-badge-live">
+                <span class="pulse-dot"></span> Active
+              </span>
+            </div>
+
+            <div class="chat-mock-body">
+              <div class="chat-bubble chat-user">
+                "How often should I water my Tulsi plant during monsoon season?"
+              </div>
+              <div class="chat-bubble chat-ai">
+                <i class="fa-solid fa-leaf" style="color: #52b788; margin-right: 4px;"></i>
+                <strong>Santhamithra:</strong> Tulsi requires well-draining loamy soil and moderate watering. During monsoon season, natural humidity is elevated: ensure your pot drainage holes are free of obstruction and allow the top 1-2 inches of soil to dry out between waterings to prevent root rot.
+              </div>
+              <div class="chat-bubble chat-user">
+                "What is the best part of Turmeric used for wellness teas?"
+              </div>
+              <div class="chat-bubble chat-ai">
+                <i class="fa-solid fa-leaf" style="color: #52b788; margin-right: 4px;"></i>
+                <strong>Santhamithra:</strong> The underground rhizome (freshly grated or dried powder) is traditionally infused with hot water or warm milk along with a pinch of black pepper to aid absorption.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       7. Final Call to Action
+       ======================================================================== -->
+  <section class="landing-cta-section">
+    <div class="container">
+      <div class="landing-cta-card">
+        <div class="landing-cta-content">
+          <span class="landing-tag" style="background: rgba(255,255,255,0.18); color: #d8f3dc; margin-bottom: 1rem;">
+            <i class="fa-solid fa-seedling"></i> Join the HerbIT Movement
+          </span>
+          <h2>Begin Your Botanical Journey Today</h2>
+          <p>
+            Whether you are curious about traditional herbal wisdom, completing academic research, or starting your own healing garden, HerbIT is your trusted botanical sanctuary.
+          </p>
+
+          <div class="landing-cta-buttons">
+            <a href="explore.html" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1.05rem;">
+              <i class="fa-solid fa-compass"></i>
+              <span>Explore Medicinal Plants</span>
+            </a>
+            <a href="register.html" class="btn btn-outline" id="final-cta-auth-btn" style="border-color: #ffffff; color: #ffffff; padding: 0.85rem 2rem; font-size: 1.05rem;">
+              <i class="fa-solid fa-user-plus"></i>
+              <span>Create Free Account</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       8. Educational Disclaimer Banner
+       ======================================================================== -->
+  <section class="disclaimer-section" style="padding: 2rem 0; background: #ffffff;">
+    <div class="container">
+      <div class="disclaimer-card">
+        <i class="fa-solid fa-circle-info disclaimer-icon"></i>
+        <div>
+          <h4>Important Educational Disclaimer</h4>
+          <p>
+            The botanical, herbal, and wellness information compiled on HerbIT is strictly for educational, academic, and cultural demonstration purposes. It does not constitute professional medical advice, diagnosis, or clinical treatment recommendations. Always consult a qualified healthcare practitioner regarding health conditions or before adopting any herbal regimen.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       9. Footer
+       ======================================================================== -->
+  <footer class="footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="brand-logo footer-logo">
+          <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
+          <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
+        </div>
+        <p class="footer-text">
+          HerbIT: Grow Knowledge. Nurture Nature. An interactive Virtual Herbal Garden and Botanical Technology platform built as a Full Stack Development Lab Project.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="#about">About HerbIT</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="explore.html">Medicinal Explorer</a></li>
+          <li><a href="assistant.html">Santhamithra AI</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>User Portal</h4>
+        <ul>
+          <li><a href="garden.html">My Personal Garden</a></li>
+          <li><a href="submit-plant.html">Submit Plant</a></li>
+          <li><a href="login.html">Sign In</a></li>
+          <li><a href="register.html">Register</a></li>
+          <li><a href="admin.html">Admin Portal</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links-group">
+        <h4>Tech Stack</h4>
+        <ul>
+          <li><i class="fa-solid fa-code"></i> HTML5, CSS3, Vanilla JS</li>
+          <li><i class="fa-brands fa-node-js"></i> Node.js & Express</li>
+          <li><i class="fa-solid fa-database"></i> MongoDB Atlas & Mongoose</li>
+          <li><i class="fa-solid fa-shield-halved"></i> Session Authentication</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-content">
+        <p>© 2026 HerbIT • College FSD Lab Mini Project. All rights reserved.</p>
+        <p class="footer-badge">Academic Full-Stack Project</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Santhamithra AI Button -->
+  <a href="assistant.html" 
+     class="floating-ai-btn" 
+     id="floating-ai-btn" 
+     aria-label="Ask Santhamithra AI" 
+     title="Ask Santhamithra AI Gardening Assistant">
+    <span class="floating-ai-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+    <span class="floating-ai-text">Ask Santhamithra</span>
+  </a>
+
+  <!-- Dedicated Landing Page JavaScript -->
+  <script src="landing.js"></script>
+</body>
+</html>

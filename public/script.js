@@ -199,75 +199,239 @@ function filterAndRenderPlants() {
 }
 
 // =============================================================================
-// Botanical Image & Placeholder System
+// Botanical Local Image & Fallback System
 // =============================================================================
-function hasValidImage(url) {
-  if (!url || typeof url !== 'string') return false;
-  const trimmed = url.trim();
-  if (!trimmed) return false;
-  // Discard legacy/unrelated stock photos (e.g. the shopping bag / cosmetic product images)
-  if (trimmed.includes('photo-1544816155-12df9643f363')) return false;
-  if (trimmed.includes('photo-1615485500704-8e990f9900f7')) return false;
-  return trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/');
-}
+const BOTANICAL_LOCAL_IMAGE_MAP = {
+  // Tulsi / Holy Basil (botanical synonyms)
+  'ocimum tenuiflorum': 'images/plants/tulsi.jpg',
+  'ocimum sanctum': 'images/plants/tulsi.jpg',
+  'ocimum gratissimum': 'images/plants/tulsi.jpg',
 
-function getBotanicalPlaceholderHTML(plant, isModal = false) {
-  const modalClass = isModal ? 'botanical-placeholder-modal' : '';
-  const botanicalName = escapeHTML(plant.scientificName || plant.botanical_name || '');
-  const plantName = escapeHTML(plant.name || 'Medicinal Herb');
-  const family = plant.family ? ` • ${escapeHTML(plant.family)}` : '';
+  // Neem
+  'azadirachta indica': 'images/plants/neem.jpg',
+  'melia azadirachta': 'images/plants/neem.jpg',
 
-  if (isModal) {
-    return `
-      <div class="botanical-placeholder ${modalClass}">
-        <div class="placeholder-decor-circle"></div>
-        <div class="placeholder-leaf-bg"><i class="fa-solid fa-leaf"></i></div>
-        <div class="placeholder-body">
-          <div class="placeholder-icon-wrap placeholder-icon-lg">
-            <i class="fa-solid fa-leaf"></i>
-          </div>
-          <span class="placeholder-tag"><i class="fa-solid fa-seedling"></i> Traditional Ayurvedic Botanical</span>
-          <h3 class="placeholder-title-lg">${plantName}</h3>
-          ${botanicalName ? `<p class="placeholder-sub-lg">${botanicalName}${family}</p>` : ''}
-        </div>
-      </div>
-    `;
+  // Aloe Vera
+  'aloe barbadensis miller': 'images/plants/aloe-vera.jpg',
+  'aloe barbadensis': 'images/plants/aloe-vera.jpg',
+  'aloe vera': 'images/plants/aloe-vera.jpg',
+
+  // Turmeric
+  'curcuma longa': 'images/plants/turmeric.jpg',
+  'curcuma domestica': 'images/plants/turmeric.jpg',
+
+  // Ginger
+  'zingiber officinale': 'images/plants/ginger.jpg',
+
+  // Mint / Peppermint
+  'mentha x piperita': 'images/plants/mint.jpg',
+  'mentha piperita': 'images/plants/mint.jpg',
+  'mentha arvensis': 'images/plants/mint.jpg',
+  'mentha spicata': 'images/plants/mint.jpg',
+
+  // Ashwagandha
+  'withania somnifera': 'images/plants/ashwagandha.jpg',
+
+  // Lemongrass
+  'cymbopogon citratus': 'images/plants/lemongrass.jpg',
+  'cymbopogon flexuosus': 'images/plants/lemongrass.jpg',
+
+  // Amla / Indian Gooseberry (botanical synonyms)
+  'phyllanthus emblica': 'images/plants/amla.jpg',
+  'emblica officinalis': 'images/plants/amla.jpg',
+
+  // Brahmi
+  'bacopa monnieri': 'images/plants/brahmi.jpg',
+  'herpestis monniera': 'images/plants/brahmi.jpg',
+
+  // Curry Leaf
+  'murraya koenigii': 'images/plants/curry-leaf.jpg',
+  'bergera koenigii': 'images/plants/curry-leaf.jpg',
+
+  // Coriander
+  'coriandrum sativum': 'images/plants/coriander.jpg',
+
+  // Fenugreek
+  'trigonella foenum-graecum': 'images/plants/fenugreek.jpg',
+
+  // Hibiscus
+  'hibiscus rosa-sinensis': 'images/plants/hibiscus.jpg',
+
+  // Garlic
+  'allium sativum': 'images/plants/garlic.jpg',
+
+  // Gotu Kola / Mandukaparni
+  'centella asiatica': 'images/plants/gotu-kola.jpg',
+  'hydrocotyle asiatica': 'images/plants/gotu-kola.jpg',
+
+  // Eucalyptus
+  'eucalyptus globulus': 'images/plants/eucalyptus.jpg',
+  'eucalyptus tereticornis': 'images/plants/eucalyptus.jpg',
+
+  // Giloy / Guduchi
+  'tinospora cordifolia': 'images/plants/giloy.jpg'
+};
+
+const COMMON_HERB_IMAGE_MAP = {
+  // Tulsi / Holy Basil (Aliases - same botanical species)
+  'tulsi': 'images/plants/tulsi.jpg',
+  'holy basil': 'images/plants/tulsi.jpg',
+  'sacred basil': 'images/plants/tulsi.jpg',
+
+  // Neem
+  'neem': 'images/plants/neem.jpg',
+  'indian lilac': 'images/plants/neem.jpg',
+  'nimba': 'images/plants/neem.jpg',
+
+  // Aloe Vera
+  'aloe vera': 'images/plants/aloe-vera.jpg',
+  'aloe': 'images/plants/aloe-vera.jpg',
+  'ghritkumari': 'images/plants/aloe-vera.jpg',
+  'kumari': 'images/plants/aloe-vera.jpg',
+
+  // Turmeric
+  'turmeric': 'images/plants/turmeric.jpg',
+  'haridra': 'images/plants/turmeric.jpg',
+  'haldi': 'images/plants/turmeric.jpg',
+
+  // Ginger
+  'ginger': 'images/plants/ginger.jpg',
+  'adrak': 'images/plants/ginger.jpg',
+  'ardraka': 'images/plants/ginger.jpg',
+  'shunthi': 'images/plants/ginger.jpg',
+
+  // Mint
+  'peppermint': 'images/plants/mint.jpg',
+  'spearmint': 'images/plants/mint.jpg',
+  'mint': 'images/plants/mint.jpg',
+  'pudina': 'images/plants/mint.jpg',
+
+  // Ashwagandha
+  'ashwagandha': 'images/plants/ashwagandha.jpg',
+  'indian ginseng': 'images/plants/ashwagandha.jpg',
+  'asgandh': 'images/plants/ashwagandha.jpg',
+
+  // Lemongrass
+  'lemongrass': 'images/plants/lemongrass.jpg',
+  'lemon grass': 'images/plants/lemongrass.jpg',
+  'bhutika': 'images/plants/lemongrass.jpg',
+
+  // Amla / Indian Gooseberry (Aliases - same botanical species)
+  'amla': 'images/plants/amla.jpg',
+  'indian gooseberry': 'images/plants/amla.jpg',
+  'amalaki': 'images/plants/amla.jpg',
+  'dhatri': 'images/plants/amla.jpg',
+
+  // Brahmi
+  'brahmi': 'images/plants/brahmi.jpg',
+  'water hyssop': 'images/plants/brahmi.jpg',
+
+  // Curry Leaf
+  'curry leaf': 'images/plants/curry-leaf.jpg',
+  'curry leaves': 'images/plants/curry-leaf.jpg',
+  'karivepaku': 'images/plants/curry-leaf.jpg',
+  'kaidarya': 'images/plants/curry-leaf.jpg',
+  'kadipatta': 'images/plants/curry-leaf.jpg',
+
+  // Coriander
+  'coriander': 'images/plants/coriander.jpg',
+  'cilantro': 'images/plants/coriander.jpg',
+  'dhanyaka': 'images/plants/coriander.jpg',
+  'dhaniya': 'images/plants/coriander.jpg',
+
+  // Fenugreek
+  'fenugreek': 'images/plants/fenugreek.jpg',
+  'methi': 'images/plants/fenugreek.jpg',
+  'methika': 'images/plants/fenugreek.jpg',
+
+  // Hibiscus
+  'hibiscus': 'images/plants/hibiscus.jpg',
+  'china rose': 'images/plants/hibiscus.jpg',
+  'japa': 'images/plants/hibiscus.jpg',
+
+  // Garlic
+  'garlic': 'images/plants/garlic.jpg',
+  'rasona': 'images/plants/garlic.jpg',
+  'lahsun': 'images/plants/garlic.jpg',
+  'lasun': 'images/plants/garlic.jpg',
+
+  // Gotu Kola
+  'gotu kola': 'images/plants/gotu-kola.jpg',
+  'gotukola': 'images/plants/gotu-kola.jpg',
+  'mandukaparni': 'images/plants/gotu-kola.jpg',
+  'mandukparni': 'images/plants/gotu-kola.jpg',
+  'indian pennywort': 'images/plants/gotu-kola.jpg',
+
+  // Eucalyptus
+  'eucalyptus': 'images/plants/eucalyptus.jpg',
+  'tailaparna': 'images/plants/eucalyptus.jpg',
+  'nilgiri': 'images/plants/eucalyptus.jpg',
+
+  // Giloy
+  'giloy': 'images/plants/giloy.jpg',
+  'guduchi': 'images/plants/giloy.jpg',
+  'amrita': 'images/plants/giloy.jpg',
+  'heart-leaved moonseed': 'images/plants/giloy.jpg'
+};
+
+function resolvePlantImage(plant) {
+  if (!plant) return 'images/plants/default-plant.jpg';
+
+  // 1. Botanical / Scientific Name match (Highest priority & precision)
+  const botName = (plant.scientificName || plant.botanical_name || '').toLowerCase().trim();
+  if (botName) {
+    if (BOTANICAL_LOCAL_IMAGE_MAP[botName]) {
+      return BOTANICAL_LOCAL_IMAGE_MAP[botName];
+    }
+    for (const [key, path] of Object.entries(BOTANICAL_LOCAL_IMAGE_MAP)) {
+      if (botName.includes(key)) {
+        return path;
+      }
+    }
   }
 
-  return `
-    <div class="botanical-placeholder">
-      <div class="placeholder-leaf-bg"><i class="fa-solid fa-leaf"></i></div>
-      <div class="placeholder-body">
-        <div class="placeholder-icon-wrap">
-          <i class="fa-solid fa-leaf"></i>
-        </div>
-        <h4 class="placeholder-title">${plantName}</h4>
-        ${botanicalName ? `<p class="placeholder-sub">${botanicalName}</p>` : ''}
-      </div>
-    </div>
-  `;
-}
+  // 2. Common / English name match using word-boundary regex (avoids substring errors like vrikshamla matching amla)
+  const name = (plant.name || '').toLowerCase().trim();
+  const engName = (plant.english_name || plant.englishName || '').toLowerCase().trim();
+  const combinedText = `${name} ${engName}`;
 
-function handleImageFallback(imgElement, plantId, isModal) {
-  const parent = imgElement.parentElement;
-  if (!parent) return;
-
-  const plant = allPlants.find((p) => String(p._id) === String(plantId)) || {
-    name: imgElement.getAttribute('alt') || 'Medicinal Herb',
-    scientificName: '',
-    botanical_name: ''
-  };
-
-  const temp = document.createElement('div');
-  temp.innerHTML = getBotanicalPlaceholderHTML(plant, Boolean(isModal)).trim();
-  const placeholderNode = temp.firstElementChild;
-  if (placeholderNode) {
-    parent.replaceChild(placeholderNode, imgElement);
+  for (const [key, path] of Object.entries(COMMON_HERB_IMAGE_MAP)) {
+    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp('(^|[^a-z0-9])' + escaped + '([^a-z0-9]|$)', 'i');
+    if (regex.test(combinedText)) {
+      return path;
+    }
   }
-}
 
-// Expose globally for inline onerror handlers
-window.handleImageFallback = handleImageFallback;
+  // 3. Existing local image path with sanity verification
+  if (plant.image && typeof plant.image === 'string') {
+    const trimmed = plant.image.trim();
+    if (trimmed.startsWith('images/plants/') || trimmed.startsWith('/images/plants/')) {
+      const filename = trimmed.split('/').pop().toLowerCase();
+      if (filename === 'default-plant.jpg' || filename === 'default-plant.svg') {
+        return 'images/plants/default-plant.jpg';
+      }
+      const herbBase = filename.replace('.jpg', '').replace('.png', '').replace('-', ' ');
+      if (combinedText.includes(herbBase) || botName.includes(herbBase)) {
+        return trimmed;
+      }
+    } else if (
+      trimmed.length > 5 &&
+      !trimmed.includes('photo-1544816155-12df9643f363') &&
+      !trimmed.includes('photo-1615485500704-8e990f9900f7') &&
+      !trimmed.includes('photo-1596797882870-8c33deeac224') &&
+      !trimmed.includes('photo-1546868871-7041f2a55e12') &&
+      !trimmed.includes('photo-1615485290382-441e4d049cb5') &&
+      !trimmed.includes('photo-1545241047-6083a3684587') &&
+      (trimmed.startsWith('http://') || trimmed.startsWith('https://') || trimmed.startsWith('/'))
+    ) {
+      return trimmed;
+    }
+  }
+
+  // 4. Neutral botanical illustration placeholder fallback
+  return 'images/plants/default-plant.jpg';
+}
 
 function renderPlantCards(plants) {
   plantsGrid.innerHTML = '';
@@ -279,16 +443,14 @@ function renderPlantCards(plants) {
 
     // Dynamic Category Badge Class
     const categoryClass = getCategoryClass(plant.category);
+    const resolvedImg = resolvePlantImage(plant);
 
-    const hasImage = hasValidImage(plant.image);
-    const imageMarkup = hasImage
-      ? `<img 
-          src="${escapeHTML(plant.image)}" 
-          alt="${escapeHTML(plant.name)}" 
-          loading="lazy"
-          onerror="handleImageFallback(this, '${escapeHTML(plant._id)}', false)"
-        />`
-      : getBotanicalPlaceholderHTML(plant, false);
+    const imageMarkup = `<img 
+      src="${escapeHTML(resolvedImg)}" 
+      alt="${escapeHTML(plant.name)}" 
+      loading="lazy"
+      onerror="this.onerror=null; this.src='images/plants/default-plant.jpg';"
+    />`;
 
     const englishText = plant.englishName ? `<span class="plant-english">(${escapeHTML(plant.englishName)})</span>` : '';
     const familyText = plant.family ? ` • <span class="plant-family">${escapeHTML(plant.family)}</span>` : '';
@@ -353,14 +515,12 @@ async function openPlantDetails(plantId) {
   }
 
   const categoryClass = getCategoryClass(plant.category);
-  const hasImage = hasValidImage(plant.image);
-  const modalBannerMarkup = hasImage
-    ? `<img 
-        src="${escapeHTML(plant.image)}" 
-        alt="${escapeHTML(plant.name)}"
-        onerror="handleImageFallback(this, '${escapeHTML(plant._id)}', true)"
-      />`
-    : getBotanicalPlaceholderHTML(plant, true);
+  const resolvedImg = resolvePlantImage(plant);
+  const modalBannerMarkup = `<img 
+    src="${escapeHTML(resolvedImg)}" 
+    alt="${escapeHTML(plant.name)}"
+    onerror="this.onerror=null; this.src='images/plants/default-plant.jpg';"
+  />`;
 
   const synonymsHtml = Array.isArray(plant.sanskritSynonyms) && plant.sanskritSynonyms.length > 0
     ? `<div class="detail-tags-group">
@@ -540,7 +700,6 @@ async function initAuthNavbar() {
 
     if (data && data.authenticated && data.user) {
       const user = data.user;
-      const firstName = user.name ? user.name.split(' ')[0] : 'Botanist';
 
       // 1. "My Garden" Link
       const myGardenLi = document.createElement('li');
@@ -552,29 +711,17 @@ async function initAuthNavbar() {
       `;
       navList.appendChild(myGardenLi);
 
-      // 2. Community Submission Link (Shown for normal users)
-      if (user.role !== 'admin') {
-        const submitLi = document.createElement('li');
-        submitLi.className = 'nav-item auth-nav-item';
-        submitLi.innerHTML = `
-          <a href="submit-plant.html" class="nav-link" id="nav-submit" title="Submit Medicinal Plant">
-            <i class="fa-solid fa-circle-plus"></i> Submit Plant
-          </a>
-        `;
-        navList.appendChild(submitLi);
-      }
-
-      // 4. "Profile" Link
+      // 2. "Profile" Link
       const profileLi = document.createElement('li');
       profileLi.className = 'nav-item auth-nav-item';
       profileLi.innerHTML = `
-        <a href="profile.html" class="nav-link user-badge ${user.role === 'admin' ? 'admin' : ''}" id="nav-profile" title="Signed in as ${escapeHTML(user.name)} (${user.role})">
-          <i class="fa-solid ${user.role === 'admin' ? 'fa-user-shield' : 'fa-circle-user'}"></i> ${escapeHTML(firstName)}
+        <a href="profile.html" class="nav-link" id="nav-profile" title="Signed in as ${escapeHTML(user.name)}">
+          <i class="fa-solid fa-circle-user"></i> Profile
         </a>
       `;
       navList.appendChild(profileLi);
 
-      // 5. Admin Dashboard link ONLY for authorized administrators
+      // 3. Admin Dashboard link ONLY for authorized administrators
       if (user.role === 'admin') {
         const adminLi = document.createElement('li');
         adminLi.className = 'nav-item auth-nav-item';
@@ -595,7 +742,7 @@ async function initAuthNavbar() {
         }
       }
 
-      // 6. Logout button
+      // 4. Logout button
       const logoutLi = document.createElement('li');
       logoutLi.className = 'nav-item auth-nav-item';
       logoutLi.innerHTML = `
@@ -648,7 +795,7 @@ window.quickAddToGarden = async function(plantId, plantName) {
     if (res.status === 401) {
       showBotanicalToast('🌱 Please log in to add herbs to your personal garden.');
       setTimeout(() => {
-        window.location.href = '/login.html?redirect=%2Findex.html%23explore';
+        window.location.href = '/login.html?redirect=%2Fexplore.html';
       }, 1200);
       return;
     }

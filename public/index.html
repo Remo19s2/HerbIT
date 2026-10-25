@@ -3,281 +3,403 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HerbIT | Grow Knowledge. Nurture Nature.</title>
-  <meta name="description" content="HerbIT is a modern botanical technology platform connecting traditional medicinal herbs with smart cultivation tools and Santhamithra AI guidance." />
-  
+  <title>Welcome to HerbIT | Grow Knowledge. Nurture Nature.</title>
+  <meta name="description" content="Welcome to HerbIT. Explore the world of medicinal plants, discover traditional botanical knowledge, and grow your own virtual herbal garden." />
+
   <!-- Google Fonts for Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --forest-deep: #0e271c;
+      --forest-main: #1b4332;
+      --emerald: #2d6a4f;
+      --sage: #52b788;
+      --mint-tint: #d8f3dc;
+      --cream-bg: #fdfbf7;
+      --cream-card: #f8f5ee;
+      --gold: #c59b27;
+      --gold-light: #fef8e7;
+      --gold-glow: rgba(197, 155, 39, 0.25);
+      --text-dark: #14241a;
+      --text-muted: #52675a;
+      --border: rgba(45, 106, 79, 0.18);
+      --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font-body);
+      background-color: var(--forest-deep);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* Full-viewport standalone layout without scrolling */
+    .welcome-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      padding: 2rem 1.5rem 1.5rem;
+      background: 
+        radial-gradient(circle at 15% 20%, rgba(197, 155, 39, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(82, 183, 136, 0.22) 0%, transparent 55%),
+        linear-gradient(155deg, rgba(14, 39, 28, 0.92) 0%, rgba(20, 56, 40, 0.88) 50%, rgba(10, 28, 20, 0.95) 100%),
+        url('images/plants/welcome-hero.jpg') center/cover no-repeat;
+    }
+
+    /* Ambient animated leaf glow */
+    .welcome-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(45, 106, 79, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Top Brand Header */
+    .welcome-header {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .welcome-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+    }
+
+    .welcome-logo-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--mint-tint);
+      color: var(--forest-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.45rem;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .welcome-brand-text {
+      text-align: left;
+    }
+
+    .welcome-brand-name {
+      font-family: var(--font-heading);
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: #ffffff;
+      display: block;
+    }
+
+    .brand-herb {
+      color: #ffffff;
+    }
+
+    .brand-it {
+      background: linear-gradient(135deg, #74c69d 0%, #52b788 50%, #e9c46a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      padding-left: 1px;
+    }
+
+    .welcome-tagline {
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #d8f3dc;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* Center Welcome Card */
+    .welcome-main {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 640px;
+      margin: auto 0;
+      animation: fadeInScale 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .welcome-card {
+      background: rgba(253, 251, 247, 0.96);
+      backdrop-filter: blur(16px);
+      border-radius: 28px;
+      padding: 3rem 2.75rem;
+      text-align: center;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.6),
+        0 0 40px var(--gold-glow);
+      border: 1px solid rgba(197, 155, 39, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2d6a4f 0%, #52b788 50%, #c59b27 100%);
+    }
+
+    .welcome-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--forest-main);
+      background: var(--mint-tint);
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(45, 106, 79, 0.15);
+    }
+
+    .welcome-pill i {
+      color: var(--gold);
+    }
+
+    .welcome-heading {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--forest-deep);
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .welcome-heading .welcome-accent {
+      color: var(--forest-main);
+      background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-desc {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      margin-bottom: 2.25rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Action Buttons */
+    .welcome-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .welcome-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      padding: 0.95rem 1.75rem;
+      font-size: 1.05rem;
+      font-weight: 700;
+      font-family: var(--font-body);
+      border-radius: 9999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      line-height: 1;
+    }
+
+    .welcome-btn-login {
+      background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
+      color: #ffffff;
+      box-shadow: 0 8px 24px rgba(27, 67, 50, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .welcome-btn-login:hover {
+      background: linear-gradient(135deg, #143628 0%, #245740 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(27, 67, 50, 0.45);
+      color: #ffffff;
+    }
+
+    .welcome-btn-register {
+      background: #ffffff;
+      color: var(--forest-main);
+      border: 2px solid var(--forest-main);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    }
+
+    .welcome-btn-register:hover {
+      background: var(--mint-tint);
+      border-color: var(--forest-main);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      color: var(--forest-deep);
+    }
+
+    /* Bottom Educational Disclaimer */
+    .welcome-footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 680px;
+      padding: 0.5rem 0;
+    }
+
+    .welcome-disclaimer {
+      font-size: 0.78rem;
+      color: #a3c2b0;
+      line-height: 1.5;
+    }
+
+    .welcome-disclaimer i {
+      color: var(--gold);
+      margin-right: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .welcome-card {
+        padding: 2.25rem 1.5rem;
+        border-radius: 22px;
+      }
+
+      .welcome-heading {
+        font-size: 2rem;
+      }
+
+      .welcome-desc {
+        font-size: 0.95rem;
+        margin-bottom: 1.75rem;
+      }
+
+      .welcome-actions {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+      }
+
+      .welcome-btn {
+        width: 100%;
+        padding: 0.85rem 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navigation Bar -->
-  <header class="navbar-header" id="top">
-    <div class="container navbar-container">
-      <a href="index.html" class="brand-logo" id="brand-logo">
-        <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
-        <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
-      </a>
-
-      <!-- Mobile Menu Toggle Button -->
-      <button class="mobile-toggle" id="mobile-toggle" aria-label="Toggle navigation">
-        <i class="fa-solid fa-bars"></i>
-      </button>
-
-      <!-- Nav Links -->
-      <nav class="nav-menu" id="nav-menu">
-        <ul class="nav-list" id="nav-list">
-          <li class="nav-item"><a href="#top" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a></li>
-          <li class="nav-item"><a href="#about" class="nav-link"><i class="fa-solid fa-seedling"></i> About</a></li>
-          <li class="nav-item"><a href="#explore" class="nav-link"><i class="fa-solid fa-compass"></i> Explore Plants</a></li>
-          <!-- Dynamic Auth Links managed by script.js -->
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-      <div class="hero-badge">
-        <i class="fa-solid fa-leaf"></i> HerbIT Botanical Platform • Grow Knowledge. Nurture Nature.
-      </div>
-      <h1 class="hero-title">Discover Nature's Healing Sanctuary</h1>
-      <p class="hero-subtitle">
-        Explore a curated digital repository of 360+ traditional medicinal herbs, Ayurvedic treasures, botanical classifications, and practical cultivation techniques.
-      </p>
-      
-      <div class="hero-actions">
-        <a href="#explore" class="btn btn-primary" id="btn-hero-explore">
-          <i class="fa-solid fa-magnifying-glass"></i> Explore Plants
-        </a>
-        <a href="admin.html" class="btn btn-outline" id="btn-hero-admin">
-          <i class="fa-solid fa-gear"></i> Manage Database
-        </a>
-      </div>
-
-      <!-- Quick Metrics Bar -->
-      <div class="hero-stats">
-        <div class="stat-card">
-          <span class="stat-num" id="total-species-count">10+</span>
-          <span class="stat-label">Herbal Species</span>
+  <div class="welcome-wrapper">
+    <!-- 1. Header with HerbIT Branding -->
+    <header class="welcome-header">
+      <div class="welcome-brand">
+        <div class="welcome-logo-icon">
+          <i class="fa-solid fa-leaf"></i>
         </div>
-        <div class="stat-divider"></div>
-        <div class="stat-card">
-          <span class="stat-num">100%</span>
-          <span class="stat-label">Verified Botanical Data</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat-card">
-          <span class="stat-num">Ayurvedic</span>
-          <span class="stat-label">& Traditional Insights</span>
+        <div class="welcome-brand-text">
+          <span class="welcome-brand-name">
+            <span class="brand-herb">Herb</span><span class="brand-it">IT</span>
+          </span>
+          <span class="welcome-tagline">Grow Knowledge. Nurture Nature.</span>
         </div>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- About Project Section -->
-  <section class="about-section" id="about">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-tag">About The Project</span>
-        <h2 class="section-title">Bridging Botanical Heritage & Modern Web Technology</h2>
-        <p class="section-description">
-          HerbIT is an educational botanical technology platform designed to document, preserve, and share knowledge of medicinal plants in a simple, responsive, full-stack environment.
+    <!-- 2. Minimal Welcome Card -->
+    <main class="welcome-main">
+      <div class="welcome-card">
+        <div class="welcome-pill">
+          <i class="fa-solid fa-seedling"></i>
+          <span>Virtual Herbal Sanctuary</span>
+        </div>
+
+        <h1 class="welcome-heading">Welcome to <span class="welcome-accent">HerbIT</span></h1>
+
+        <p class="welcome-desc">
+          Explore the world of medicinal plants, discover traditional botanical knowledge, and grow your own virtual herbal garden.
         </p>
-      </div>
 
-      <div class="about-grid">
-        <div class="about-card">
-          <div class="about-icon-box">
-            <i class="fa-solid fa-mortar-pestle"></i>
-          </div>
-          <h3>Traditional Wisdom</h3>
-          <p>Learn time-tested wellness uses and traditional applications of revered Indian herbs like Tulsi, Neem, Turmeric, and Ashwagandha.</p>
-        </div>
-
-        <div class="about-card">
-          <div class="about-icon-box">
-            <i class="fa-solid fa-dna"></i>
-          </div>
-          <h3>Botanical Taxonomy</h3>
-          <p>Access accurate scientific nomenclature, classification categories, and specific plant anatomical parts used in herbal remedies.</p>
-        </div>
-
-        <div class="about-card">
-          <div class="about-icon-box">
-            <i class="fa-solid fa-sun-plant-wilt"></i>
-          </div>
-          <h3>Cultivation Guides</h3>
-          <p>Gain actionable insights on sunlight, soil requirements, watering needs, and environmental care to grow these herbs in your home garden.</p>
+        <div class="welcome-actions">
+          <a href="login.html" class="welcome-btn welcome-btn-login" id="welcome-btn-login">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Login</span>
+          </a>
+          <a href="register.html" class="welcome-btn welcome-btn-register" id="welcome-btn-register">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Register</span>
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </main>
 
-  <!-- Plant Explorer Section -->
-  <section class="explorer-section" id="explore">
-    <div class="container">
-      <div class="section-header">
-        <div>
-          <span class="section-tag">Plant Explorer</span>
-          <h2 class="section-title">Explore Medicinal Plants</h2>
-          <p class="section-description">Search by plant name or filter by traditional herbal categories.</p>
-        </div>
-        <div class="plant-count-badge" id="plant-count-badge">
-          <i class="fa-solid fa-leaf"></i> <span id="count-display">Loading plants...</span>
-        </div>
-      </div>
-
-      <!-- Search and Filter Bar -->
-      <div class="filter-controls-card">
-        <!-- Search Input -->
-        <div class="search-input-wrapper">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input
-            type="text"
-            id="search-input"
-            class="search-input"
-            placeholder="Search by plant name (e.g. Tulsi, Neem, Aloe)..."
-            autocomplete="off"
-          />
-          <button class="clear-search-btn" id="clear-search-btn" title="Clear search" style="display: none;">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-
-        <!-- Category Pills -->
-        <div class="category-pills" id="category-pills">
-          <button class="pill-btn active" data-category="All">All Plants</button>
-          <button class="pill-btn" data-category="Medicinal">Medicinal</button>
-          <button class="pill-btn" data-category="Ayurvedic">Ayurvedic</button>
-          <button class="pill-btn" data-category="Aromatic">Aromatic</button>
-          <button class="pill-btn" data-category="Common Herbs">Common Herbs</button>
-          <button class="pill-btn" data-category="Other">Other</button>
-        </div>
-      </div>
-
-      <!-- State: Loading Spinner -->
-      <div class="state-container" id="loading-state">
-        <div class="spinner"></div>
-        <p>Fetching medicinal plants from database...</p>
-      </div>
-
-      <!-- State: Error Message -->
-      <div class="state-container error-state" id="error-state" style="display: none;">
-        <i class="fa-solid fa-triangle-exclamation state-icon"></i>
-        <h3>Unable to load plants</h3>
-        <p id="error-message">Could not connect to the backend server. Please verify the Express server and MongoDB are running.</p>
-        <button class="btn btn-primary" id="retry-fetch-btn">
-          <i class="fa-solid fa-rotate-right"></i> Try Again
-        </button>
-      </div>
-
-      <!-- State: Empty State -->
-      <div class="state-container empty-state" id="empty-state" style="display: none;">
-        <i class="fa-solid fa-plant-wilt state-icon"></i>
-        <h3>No matching plants found</h3>
-        <p>No plants match your current search query or selected category filter.</p>
-        <button class="btn btn-outline" id="reset-filter-btn">
-          <i class="fa-solid fa-filter-circle-xmark"></i> Reset All Filters
-        </button>
-      </div>
-
-      <!-- Plants Grid Container -->
-      <div class="plants-grid" id="plants-grid"></div>
-    </div>
-  </section>
-
-  <!-- Plant Details Modal -->
-  <div class="modal-backdrop" id="plant-modal" aria-hidden="true">
-    <div class="modal-dialog">
-      <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <div class="modal-content" id="modal-content">
-        <!-- Content dynamically injected via script.js -->
-      </div>
-    </div>
+    <!-- 3. Small, Unobtrusive Educational Disclaimer -->
+    <footer class="welcome-footer">
+      <p class="welcome-disclaimer">
+        <i class="fa-solid fa-circle-info"></i>
+        HerbIT is an educational resource for botanical and traditional wellness knowledge. It does not constitute professional medical advice.
+      </p>
+    </footer>
   </div>
 
-  <!-- Educational Disclaimer Banner -->
-  <section class="disclaimer-section">
-    <div class="container">
-      <div class="disclaimer-card">
-        <i class="fa-solid fa-circle-info disclaimer-icon"></i>
-        <div>
-          <h4>Educational Disclaimer</h4>
-          <p>
-            The botanical and wellness information presented in HerbIT is strictly for educational, academic, and cultural demonstration purposes. It does not constitute medical advice.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-container">
-      <div class="footer-brand">
-        <div class="brand-logo footer-logo">
-          <span class="logo-icon"><i class="fa-solid fa-leaf"></i></span>
-          <span class="logo-text"><span class="brand-herb">Herb</span><span class="brand-it">IT</span></span>
-        </div>
-        <p class="footer-text">
-          HerbIT: Grow Knowledge. Nurture Nature. A Full Stack Web Development Lab Mini Project built with HTML, CSS, JavaScript, Node.js, Express, and MongoDB Atlas.
-        </p>
-      </div>
-
-      <div class="footer-links-group">
-        <h4>Quick Navigation</h4>
-        <ul>
-          <li><a href="#top">Home</a></li>
-          <li><a href="#about">About Project</a></li>
-          <li><a href="#explore">Plant Explorer</a></li>
-          <li><a href="admin.html">Admin Portal</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-links-group">
-        <h4>Tech Stack</h4>
-        <ul>
-          <li><i class="fa-solid fa-code"></i> Frontend: HTML5, CSS3, Vanilla JS</li>
-          <li><i class="fa-brands fa-node-js"></i> Backend: Node.js & Express</li>
-          <li><i class="fa-solid fa-database"></i> Database: MongoDB Atlas & Mongoose</li>
-          <li><i class="fa-solid fa-plug"></i> Architecture: RESTful API</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="container footer-bottom-content">
-        <p>© 2026 HerbIT • College FSD Lab Mini Project</p>
-        <p class="footer-badge">Academic Demonstration</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Floating Santhamithra AI Button (Homepage Only) -->
-  <a href="assistant.html" 
-     class="floating-ai-btn" 
-     id="floating-ai-btn" 
-     aria-label="Ask Santhamithra AI" 
-     title="Ask Santhamithra AI Gardening Assistant">
-    <span class="floating-ai-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-    <span class="floating-ai-text">Ask Santhamithra</span>
-  </a>
-
-  <!-- Main JavaScript File -->
-  <script src="script.js"></script>
+  <script>
+    // Seamless authenticated transition: if user already has an active session, direct them to home.html
+    (async function checkExistingAuth() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.authenticated) {
+            window.location.replace('/home.html');
+          }
+        }
+      } catch (e) {
+        // Silently proceed for offline / guests
+      }
+    })();
+  </script>
 </body>
 </html>
